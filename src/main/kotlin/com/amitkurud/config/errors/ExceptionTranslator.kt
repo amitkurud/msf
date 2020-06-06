@@ -28,7 +28,7 @@ private const val VIOLATIONS_KEY = "violations"
 @ControllerAdvice
 class ExceptionTranslator : ProblemHandling {
 
-    @Value("\${clientApp.name}")
+    @Value("\${spring.application.name}")
     private val applicationName: String? = null
 
     /**
@@ -40,20 +40,20 @@ class ExceptionTranslator : ProblemHandling {
             return entity
         }
         val builder = Problem.builder()
-            .withType(if (Problem.DEFAULT_TYPE == problem.type) DEFAULT_TYPE else problem.type)
-            .withStatus(problem.status)
-            .withTitle(problem.title)
-            .with(PATH_KEY, request!!.getNativeRequest(HttpServletRequest::class.java)!!.requestURI)
+                .withType(if (Problem.DEFAULT_TYPE == problem.type) DEFAULT_TYPE else problem.type)
+                .withStatus(problem.status)
+                .withTitle(problem.title)
+                .with(PATH_KEY, request!!.getNativeRequest(HttpServletRequest::class.java)!!.requestURI)
 
         if (problem is ConstraintViolationProblem) {
             builder
-                .with(VIOLATIONS_KEY, problem.violations)
-                .with(MESSAGE_KEY, ERR_VALIDATION)
+                    .with(VIOLATIONS_KEY, problem.violations)
+                    .with(MESSAGE_KEY, ERR_VALIDATION)
         } else {
             builder
-                .withCause((problem as DefaultProblem).cause)
-                .withDetail(problem.detail)
-                .withInstance(problem.instance)
+                    .withCause((problem as DefaultProblem).cause)
+                    .withDetail(problem.detail)
+                    .withInstance(problem.instance)
             problem.parameters.forEach { (key, value) -> builder.with(key, value) }
             if (!problem.parameters.containsKey(MESSAGE_KEY) && problem.status != null) {
                 builder.with(MESSAGE_KEY, "error.http." + problem.status!!.statusCode)
@@ -63,38 +63,53 @@ class ExceptionTranslator : ProblemHandling {
     }
 
     override fun handleMethodArgumentNotValid(
-        ex: MethodArgumentNotValidException,
-        request: NativeWebRequest
+            ex: MethodArgumentNotValidException,
+            request: NativeWebRequest
     ): ResponseEntity<Problem>? {
         val result = ex.bindingResult
         val fieldErrors = result.fieldErrors.map { FieldErrorVM(it.objectName.replaceFirst(Regex("DTO$"), ""), it.field, it.code) }
 
         val problem = Problem.builder()
-            .withType(CONSTRAINT_VIOLATION_TYPE)
-            .withTitle("Method argument not valid")
-            .withStatus(defaultConstraintViolationStatus())
-            .with(MESSAGE_KEY, ERR_VALIDATION)
-            .with(FIELD_ERRORS_KEY, fieldErrors)
-            .build()
+                .withType(CONSTRAINT_VIOLATION_TYPE)
+                .withTitle("Method argument not valid")
+                .withStatus(defaultConstraintViolationStatus())
+                .with(MESSAGE_KEY, ERR_VALIDATION)
+                .with(FIELD_ERRORS_KEY, fieldErrors)
+                .build()
         return create(ex, problem, request)
     }
 
     @ExceptionHandler
     fun handleBadRequestAlertException(
-        ex: BadRequestAlertException,
-        request: NativeWebRequest
+            ex: BadRequestAlertException,
+            request: NativeWebRequest
     ): ResponseEntity<Problem>? =
-        create(
-            ex, request,
-            HeaderUtil.createFailureAlert(applicationName, true, ex.entityName, ex.errorKey, ex.message)
-        )
+            create(
+                    ex, request,
+                    HeaderUtil.createFailureAlert(applicationName, true, ex.entityName, ex.errorKey, ex.message)
+            )
 
     @ExceptionHandler
     fun handleConcurrencyFailure(ex: ConcurrencyFailureException, request: NativeWebRequest): ResponseEntity<Problem>? {
         val problem = Problem.builder()
-            .withStatus(Status.CONFLICT)
-            .with(MESSAGE_KEY, ERR_CONCURRENCY_FAILURE)
-            .build()
+                .withStatus(Status.CONFLICT)
+                .with(MESSAGE_KEY, ERR_CONCURRENCY_FAILURE)
+                .build()
         return create(ex, problem, request)
     }
+
+    @ExceptionHandler
+    fun handleBusinessValidationFailure(ex: BusinessValidationException, request: NativeWebRequest): ResponseEntity<Problem>? =
+            create(
+                    ex, request,
+                    HeaderUtil.createFailureAlert(applicationName, true, ex.entityName, ExceptionGroup.BUSINESS_VALIDATION.group, ex.message)
+            )
+
+    @ExceptionHandler
+    fun handleDoesNotExistsFailure(ex: DoesNotExistsException,request: NativeWebRequest):ResponseEntity<Problem>?=
+            create(
+                    ex, request,
+                    HeaderUtil.createFailureAlert(applicationName, true, ex.entityName, ExceptionGroup.ENTITY_DOES_NOT_EXCEPTION.group, ex.message)
+            )
+
 }

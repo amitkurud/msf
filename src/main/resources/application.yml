@@ -1,7 +1,3 @@
-server:
-  port: 8096
-clientApp:
-  name: test
 spring:
   jpa:
     open-in-view: false
@@ -9,14 +5,10 @@ spring:
       hibernate.jdbc.time_zone: UTC
       hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
   datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/core?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: root
-    password: root
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -25,12 +17,3 @@ spring:
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
-    jpa:
-      show-sql: false
-
-jwt:
-  header: "hello"
-  token-start-with: "Bearer"
-  enabled: true
-swagger:
-  enabled: true
