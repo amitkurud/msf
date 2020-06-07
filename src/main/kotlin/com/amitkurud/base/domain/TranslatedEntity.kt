@@ -4,15 +4,16 @@
 
 package com.amitkurud.base.domain
 
-import javax.persistence.JoinColumn
-import javax.persistence.MappedSuperclass
-import javax.persistence.OneToMany
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
+import javax.persistence.*
 
 @MappedSuperclass
-abstract class TranslatedEntity<T: TranslationEntity> : BaseEntity() {
+abstract class TranslatedEntity<T : TranslationEntity> : BaseEntity() {
 
-    @OneToMany
-    @JoinColumn(name = "entity_id",referencedColumnName = "id")
+    @OneToMany(cascade = [CascadeType.ALL],orphanRemoval = true,fetch = FetchType.LAZY)
+    @JoinColumn(name = "entity_id", referencedColumnName = "id")
+    @Fetch(FetchMode.JOIN)
     var translations: MutableSet<T> = mutableSetOf()
 
 }

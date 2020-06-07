@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020. Amit Kurud
+ */
+
 package com.amitkurud.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties

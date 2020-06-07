@@ -1,9 +1,13 @@
+/*
+ * Copyright (c) 2020. Amit Kurud
+ */
+
 package com.amitkurud.config.errors
 
 import com.amitkurud.utils.HeaderUtil
-import javax.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.dao.ConcurrencyFailureException
+import org.springframework.dao.InvalidDataAccessResourceUsageException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -13,8 +17,8 @@ import org.zalando.problem.DefaultProblem
 import org.zalando.problem.Problem
 import org.zalando.problem.Status
 import org.zalando.problem.spring.web.advice.ProblemHandling
-import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait
 import org.zalando.problem.violations.ConstraintViolationProblem
+import javax.servlet.http.HttpServletRequest
 
 private const val FIELD_ERRORS_KEY = "fieldErrors"
 private const val MESSAGE_KEY = "message"
@@ -43,7 +47,7 @@ class ExceptionTranslator : ProblemHandling {
                 .withType(if (Problem.DEFAULT_TYPE == problem.type) DEFAULT_TYPE else problem.type)
                 .withStatus(problem.status)
                 .withTitle(problem.title)
-                .with(PATH_KEY, request!!.getNativeRequest(HttpServletRequest::class.java)!!.requestURI)
+                .with(PATH_KEY, request.getNativeRequest(HttpServletRequest::class.java)!!.requestURI)
 
         if (problem is ConstraintViolationProblem) {
             builder
@@ -106,10 +110,24 @@ class ExceptionTranslator : ProblemHandling {
             )
 
     @ExceptionHandler
-    fun handleDoesNotExistsFailure(ex: DoesNotExistsException,request: NativeWebRequest):ResponseEntity<Problem>?=
+    fun handleDoesNotExistsFailure(ex: DoesNotExistsException, request: NativeWebRequest): ResponseEntity<Problem>? =
             create(
                     ex, request,
                     HeaderUtil.createFailureAlert(applicationName, true, ex.entityName, ExceptionGroup.ENTITY_DOES_NOT_EXCEPTION.group, ex.message)
             )
+
+    @ExceptionHandler
+    fun handleDataAccessException(ex: InvalidDataAccessResourceUsageException,
+                                  request: NativeWebRequest): ResponseEntity<Problem>? {
+        val problem = Problem.builder()
+                .withType(CONSTRAINT_VIOLATION_TYPE)
+                .withTitle("SQL Data Exception")
+                .withStatus(defaultConstraintViolationStatus())
+                .withCause(toProblem(ex.cause))
+                .withCause(toProblem(ex.mostSpecificCause))
+                .withDetail(ex.mostSpecificCause.message)
+                .build()
+        return create(ex, problem, request)
+    }
 
 }
