@@ -14,7 +14,7 @@ import javax.persistence.MappedSuperclass
 abstract class BaseEntity : AuditingEntity() {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")
-    @Column(columnDefinition = "CHAR(32)")
+    @Column(name = "id", columnDefinition = "CHAR(32)")
     @Id
     var id: String? = null
 }

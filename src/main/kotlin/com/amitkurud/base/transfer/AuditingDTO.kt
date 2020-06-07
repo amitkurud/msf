@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.annotation.LastModifiedDate
+import java.time.Instant
 import java.time.ZonedDateTime
 import javax.persistence.Column
 
@@ -16,9 +17,9 @@ abstract class AuditingDTO {
 
     var createdBy: String? = null
 
-    var createdDate: ZonedDateTime? = ZonedDateTime.now()
+    var createdDate: Instant? = Instant.now()
 
     var lastModifiedBy: String? = null
 
-    var lastModifiedDate: ZonedDateTime? = ZonedDateTime.now()
+    var lastModifiedDate: Instant? = Instant.now()
 }

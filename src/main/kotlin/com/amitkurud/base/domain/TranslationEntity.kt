@@ -4,14 +4,15 @@
 
 package com.amitkurud.base.domain
 
+import javax.persistence.Column
 import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
 abstract class TranslationEntity : BaseEntity() {
 
-    var entityId: String = ""
-
+    @Column(name = "lang_cd",length = 2)
     var langCd: String = ""
 
+    @Column(name = "description",length = 120)
     var description: String = ""
 }
