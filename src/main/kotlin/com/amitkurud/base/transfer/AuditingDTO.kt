@@ -15,11 +15,15 @@ import javax.persistence.Column
 
 abstract class AuditingDTO {
 
+    @JsonIgnore
     var createdBy: String? = null
 
+    @JsonIgnore
     var createdDate: Instant? = Instant.now()
 
+    @JsonIgnore
     var lastModifiedBy: String? = null
 
+    @JsonIgnore
     var lastModifiedDate: Instant? = Instant.now()
 }
