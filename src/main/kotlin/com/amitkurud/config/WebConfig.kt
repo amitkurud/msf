@@ -26,7 +26,7 @@ import org.zalando.problem.ProblemModule
 
 @EnableWebMvc
 @Configuration
-class WebConfig(@Autowired var environment: Environment) : WebMvcConfigurer {
+class WebConfig(val environment: Environment) : WebMvcConfigurer {
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("swagger-ui.html")
@@ -49,7 +49,7 @@ class WebConfig(@Autowired var environment: Environment) : WebMvcConfigurer {
         if (!environment.acceptsProfiles(Profiles.of(DEV_PROFILE))) {
             val problemModule = ProblemModule()
             problemModule.withStackTraces(false)
-            var mapper: ObjectMapper = Jackson2ObjectMapperBuilder.json().modules(JavaTimeModule(), problemModule).build()
+            val mapper: ObjectMapper = Jackson2ObjectMapperBuilder.json().modules(JavaTimeModule(), problemModule).build()
             converters.add(MappingJackson2HttpMessageConverter(mapper))
         }
     }
