@@ -8,6 +8,6 @@ import org.zalando.problem.AbstractThrowableProblem
 import org.zalando.problem.Exceptional
 
 open class DoesNotExistsException(val entityName: String)
-    : AbstractThrowableProblem(BUSINESS_VALIDATION_EXCEPTION, ExceptionGroup.ENTITY_DOES_NOT_EXCEPTION.group, Status.ENTITY_DOES_NOT_EXISTS) {
+    : AbstractThrowableProblem(BUSINESS_VALIDATION_EXCEPTION, ExceptionGroup.ENTITY_DOES_NOT_EXCEPTION.value, Status.ENTITY_DOES_NOT_EXISTS) {
     override fun getCause(): Exceptional? = super.cause
 }
