@@ -13,7 +13,4 @@ import org.springframework.stereotype.Service
 @Service
 class KafkaConsumer(@Autowired
                     val properties: KafkaProperties) {
-
-
-
 }
