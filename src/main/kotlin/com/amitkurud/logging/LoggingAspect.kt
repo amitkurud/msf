@@ -3,7 +3,10 @@
  */
 
 package com.amitkurud.logging
+
 import com.amitkurud.config.DEV_PROFILE
+import io.micrometer.core.aop.TimedAspect
+import io.micrometer.core.instrument.MeterRegistry
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.AfterThrowing
@@ -11,8 +14,10 @@ import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Pointcut
 import org.slf4j.LoggerFactory
+import org.springframework.context.annotation.Bean
 import org.springframework.core.env.Environment
 import org.springframework.core.env.Profiles
+
 
 @Suppress("unused")
 @Aspect
@@ -25,6 +30,7 @@ open class LoggingAspect(private val env: Environment) {
     )
     fun springBeanPointcut() =
             Unit // Method is empty as this is just a Pointcut, the implementations are in the advices.
+
     @Pointcut(
             "within(com.amitkurud..*)" +
                     " || within(com.amitkurud..*)" +
@@ -78,4 +84,10 @@ open class LoggingAspect(private val env: Environment) {
             throw e
         }
     }
+
+    @Bean
+    fun timedAspect(registry: MeterRegistry?): TimedAspect {
+        return TimedAspect(registry)
+    }
+
 }

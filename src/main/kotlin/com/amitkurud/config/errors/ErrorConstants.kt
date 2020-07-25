@@ -14,4 +14,4 @@ const val PROBLEM_BASE_URL: String = "localhost:8096"
 val DEFAULT_TYPE: URI = URI.create("$PROBLEM_BASE_URL/problem-with-message")
 @JvmField
 val CONSTRAINT_VIOLATION_TYPE: URI = URI.create("$PROBLEM_BASE_URL/constraint-violation")
-val BUSINESS_VALIDATION_EXCEPTION: URI = URI.create("$PROBLEM_BASE_URL/login-already-used")
+val BUSINESS_VALIDATION_EXCEPTION: URI = URI.create("$PROBLEM_BASE_URL/business-exception")

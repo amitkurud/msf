@@ -6,7 +6,6 @@ package com.amitkurud.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
 import org.springframework.core.env.Profiles
@@ -29,16 +28,19 @@ import org.zalando.problem.ProblemModule
 class WebConfig(val environment: Environment) : WebMvcConfigurer {
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/")
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/")
+        registry.apply {
+            addResourceHandler("swagger-ui.html")
+                    .addResourceLocations("classpath:/META-INF/resources/")
+            addResourceHandler("/webjars/**")
+                    .addResourceLocations("classpath:/META-INF/resources/webjars/")
+        }
     }
 
     override fun addFormatters(registry: FormatterRegistry) {
-        val registrar = DateTimeFormatterRegistrar()
-        registrar.setUseIsoFormat(true)
-        registrar.registerFormatters(registry)
+        DateTimeFormatterRegistrar().apply {
+            setUseIsoFormat(true)
+            registerFormatters(registry)
+        }
     }
 
     override fun configurePathMatch(configurer: PathMatchConfigurer) {
