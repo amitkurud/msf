@@ -22,7 +22,7 @@
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <problem-spring-web.version>0.24.0</problem-spring-web.version>
         <problem-handling.version>0.23.0</problem-handling.version>
-        <swagger-ui.version>2.2.2</swagger-ui.version>
+        <swagger-ui.version>2.9.2</swagger-ui.version>
     </properties>
 
     <dependencies>
