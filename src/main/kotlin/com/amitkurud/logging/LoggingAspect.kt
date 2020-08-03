@@ -4,6 +4,7 @@
 
 package com.amitkurud.logging
 
+import com.alibaba.fastjson.JSON
 import com.amitkurud.config.DEV_PROFILE
 import io.micrometer.core.aop.TimedAspect
 import io.micrometer.core.instrument.MeterRegistry
@@ -65,7 +66,13 @@ open class LoggingAspect(private val env: Environment) {
         if (log.isDebugEnabled) {
             log.debug(
                     "Enter: {}() with argument[s] = {}",
-                    joinPoint.signature.name, joinPoint.args.joinToString()
+                    joinPoint.signature.name, joinPoint.args.map {
+                if (it.javaClass.packageName.contains("com.amitkurud", false)) {
+                    JSON.toJSON(it)
+                } else {
+                    it.toString()
+                }
+            }.joinToString()
             )
         }
         try {
