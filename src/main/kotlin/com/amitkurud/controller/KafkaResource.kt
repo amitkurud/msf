@@ -5,6 +5,7 @@
 package com.amitkurud.controller
 
 import com.amitkurud.config.KafkaProperties
+import io.swagger.annotations.Api
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
@@ -19,6 +20,7 @@ import java.util.concurrent.Executors
 
 @RestController
 @RequestMapping("coreKafka")
+@Api
 class KafkaResource(
         private val kafkaProperties: KafkaProperties
 ) {

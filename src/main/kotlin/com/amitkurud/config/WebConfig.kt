@@ -5,6 +5,7 @@
 package com.amitkurud.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
@@ -52,6 +53,11 @@ class WebConfig(val environment: Environment) : WebMvcConfigurer {
             val problemModule = ProblemModule()
             problemModule.withStackTraces(false)
             val mapper: ObjectMapper = Jackson2ObjectMapperBuilder.json().modules(JavaTimeModule(), problemModule).build()
+            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+            converters.add(MappingJackson2HttpMessageConverter(mapper))
+        } else {
+            val mapper: ObjectMapper = Jackson2ObjectMapperBuilder.json().modules(JavaTimeModule()).build()
+            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             converters.add(MappingJackson2HttpMessageConverter(mapper))
         }
     }
