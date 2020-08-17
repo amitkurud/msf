@@ -106,7 +106,7 @@ class ExceptionTranslator : ProblemHandling {
     fun handleBusinessValidationFailure(ex: BusinessValidationException, request: NativeWebRequest): ResponseEntity<Problem>? =
             create(
                     ex, request,
-                    HeaderUtil.createFailureAlert(applicationName, true, ex.entityName, ExceptionGroup.BUSINESS_VALIDATION.value, ex.message)
+                    HeaderUtil.createFailureAlert(applicationName, true, ex.entityName, ex.errorKey, ex.message)
             )
 
     @ExceptionHandler
