@@ -129,6 +129,11 @@ class MicroServiceProperties {
      */
     val auditEvents = AuditEvents()
 
+    /**
+     * Getter for field Language
+     */
+    val language = Language()
+
     class Async {
         var corePoolSize: Int = PropertiesDefaults.Async.corePoolSize
         var maxPoolSize: Int = PropertiesDefaults.Async.maxPoolSize
@@ -348,5 +353,12 @@ class MicroServiceProperties {
     class AuditEvents {
         var retentionPeriod: Int = PropertiesDefaults.AuditEvents.retentionPeriod
 
+    }
+
+    class Language {
+
+        var defaultLang: String = PropertiesDefaults.Language.default_lang
+
+        var use3rdPartyAPITranslateService: Boolean = PropertiesDefaults.Language.use3rdPartyAPITranslateService
     }
 }

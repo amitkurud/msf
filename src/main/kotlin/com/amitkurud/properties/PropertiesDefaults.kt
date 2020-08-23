@@ -239,4 +239,11 @@ interface PropertiesDefaults {
             const val retentionPeriod = 30
         }
     }
+
+    interface Language {
+        companion object {
+            const val default_lang = "en"
+            var use3rdPartyAPITranslateService : Boolean = false
+        }
+    }
 }
