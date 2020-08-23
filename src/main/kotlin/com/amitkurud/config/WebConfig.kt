@@ -31,9 +31,9 @@ class WebConfig(val environment: Environment) : WebMvcConfigurer {
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.apply {
             addResourceHandler("swagger-ui.html")
-                    .addResourceLocations("classpath:/META-INF/resources/")
+                .addResourceLocations("classpath:/META-INF/resources/")
             addResourceHandler("/webjars/**")
-                    .addResourceLocations("classpath:/META-INF/resources/webjars/")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/")
         }
     }
 
@@ -52,7 +52,8 @@ class WebConfig(val environment: Environment) : WebMvcConfigurer {
         if (!environment.acceptsProfiles(Profiles.of(DEV_PROFILE))) {
             val problemModule = ProblemModule()
             problemModule.withStackTraces(false)
-            val mapper: ObjectMapper = Jackson2ObjectMapperBuilder.json().modules(JavaTimeModule(), problemModule).build()
+            val mapper: ObjectMapper =
+                Jackson2ObjectMapperBuilder.json().modules(JavaTimeModule(), problemModule).build()
             mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             converters.add(MappingJackson2HttpMessageConverter(mapper))
         } else {

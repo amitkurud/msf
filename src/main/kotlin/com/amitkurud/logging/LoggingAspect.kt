@@ -25,20 +25,20 @@ import org.springframework.core.env.Profiles
 open class LoggingAspect(private val env: Environment) {
 
     @Pointcut(
-            "within(@org.springframework.stereotype.Repository *)" +
-                    " || within(@org.springframework.stereotype.Service *)" +
-                    " || within(@org.springframework.web.bind.annotation.RestController *)"
+        "within(@org.springframework.stereotype.Repository *)" +
+                " || within(@org.springframework.stereotype.Service *)" +
+                " || within(@org.springframework.web.bind.annotation.RestController *)"
     )
     fun springBeanPointcut() =
-            Unit // Method is empty as this is just a Pointcut, the implementations are in the advices.
+        Unit // Method is empty as this is just a Pointcut, the implementations are in the advices.
 
     @Pointcut(
-            "within(com.amitkurud..*)" +
-                    " || within(com.amitkurud..*)" +
-                    " || within(com.amitkurud..*)"
+        "within(com.amitkurud..*)" +
+                " || within(com.amitkurud..*)" +
+                " || within(com.amitkurud..*)"
     )
     fun applicationPackagePointcut() =
-            Unit // Method is empty as this is just a Pointcut, the implementations are in the advices.
+        Unit // Method is empty as this is just a Pointcut, the implementations are in the advices.
 
     private fun logger(joinPoint: JoinPoint) = LoggerFactory.getLogger(joinPoint.signature.declaringTypeName)
 
@@ -47,15 +47,15 @@ open class LoggingAspect(private val env: Environment) {
 
         if (env.acceptsProfiles(Profiles.of(DEV_PROFILE))) {
             logger(joinPoint).error(
-                    "Exception in {}() with cause = \'{}\' and exception = \'{}\'",
-                    joinPoint.signature.name,
-                    if (e.cause != null) e.cause else "NULL",
-                    e.message, e
+                "Exception in {}() with cause = \'{}\' and exception = \'{}\'",
+                joinPoint.signature.name,
+                if (e.cause != null) e.cause else "NULL",
+                e.message, e
             )
         } else {
             logger(joinPoint).error(
-                    "Exception in {}() with cause = {}", joinPoint.signature.name,
-                    if (e.cause != null) e.cause else "NULL"
+                "Exception in {}() with cause = {}", joinPoint.signature.name,
+                if (e.cause != null) e.cause else "NULL"
             )
         }
     }
@@ -65,28 +65,28 @@ open class LoggingAspect(private val env: Environment) {
         val log = logger(joinPoint)
         if (log.isDebugEnabled) {
             log.debug(
-                    "Enter: {}() with argument[s] = {}",
-                    joinPoint.signature.name, joinPoint.args.map {
-                if (it.javaClass.packageName.contains("com.amitkurud", false)) {
-                    JSON.toJSON(it)
-                } else {
-                    it.toString()
-                }
-            }.joinToString()
+                "Enter: {}() with argument[s] = {}",
+                joinPoint.signature.name, joinPoint.args.map {
+                    if (it.javaClass.packageName.contains("com.amitkurud", false)) {
+                        JSON.toJSON(it)
+                    } else {
+                        it.toString()
+                    }
+                }.joinToString()
             )
         }
         try {
             val result = joinPoint.proceed()
             if (log.isDebugEnabled) {
                 log.debug(
-                        "Exit: {}() with result = {}", joinPoint.signature.name, result
+                    "Exit: {}() with result = {}", joinPoint.signature.name, result
                 )
             }
             return result
         } catch (e: IllegalArgumentException) {
             log.error(
-                    "Illegal argument: {} in {}()", joinPoint.args.joinToString(),
-                    joinPoint.signature.name
+                "Illegal argument: {} in {}()", joinPoint.args.joinToString(),
+                joinPoint.signature.name
             )
             throw e
         }

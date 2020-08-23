@@ -12,8 +12,10 @@ import java.util.*
 import javax.validation.constraints.NotNull
 
 @ConfigurationProperties(prefix = "msf", ignoreUnknownFields = false)
-@PropertySources(PropertySource(value = ["classpath:git.properties"], ignoreResourceNotFound = true),
-        PropertySource(value = ["classpath:META-INF/build-info.properties"], ignoreResourceNotFound = true))
+@PropertySources(
+    PropertySource(value = ["classpath:git.properties"], ignoreResourceNotFound = true),
+    PropertySource(value = ["classpath:META-INF/build-info.properties"], ignoreResourceNotFound = true)
+)
 class MicroServiceProperties {
     /**
      *
@@ -252,7 +254,8 @@ class MicroServiceProperties {
                 var secret: String? = PropertiesDefaults.Security.Authentication.Jwt.secret
                 var base64Secret: String? = PropertiesDefaults.Security.Authentication.Jwt.base64Secret
                 var tokenValidityInSeconds: Long = PropertiesDefaults.Security.Authentication.Jwt.tokenValidityInSeconds
-                var tokenValidityInSecondsForRememberMe: Long = PropertiesDefaults.Security.Authentication.Jwt.tokenValidityInSecondsForRememberMe
+                var tokenValidityInSecondsForRememberMe: Long =
+                    PropertiesDefaults.Security.Authentication.Jwt.tokenValidityInSecondsForRememberMe
 
             }
         }
@@ -322,7 +325,8 @@ class MicroServiceProperties {
     class Gateway {
         val rateLimiting = RateLimiting()
 
-        var authorizedMicroservicesEndpoints: Map<String, List<String>> = PropertiesDefaults.Gateway.authorizedMicroservicesEndpoints
+        var authorizedMicroservicesEndpoints: Map<String, List<String>> =
+            PropertiesDefaults.Gateway.authorizedMicroservicesEndpoints
 
         class RateLimiting {
             var isEnabled: Boolean = PropertiesDefaults.Gateway.RateLimiting.enabled

@@ -4,5 +4,4 @@
 
 package com.amitkurud.kafka.entities
 
-enum class Operation {
-}
+enum class Operation

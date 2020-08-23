@@ -13,5 +13,4 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @EnableJpaRepositories("com.amitkurud.*")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
-class DatabaseConfiguration {
-}
+class DatabaseConfiguration

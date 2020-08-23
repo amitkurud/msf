@@ -4,5 +4,4 @@
 
 package com.amitkurud.kafka.entities
 
-enum class Topics {
-}
+enum class Topics

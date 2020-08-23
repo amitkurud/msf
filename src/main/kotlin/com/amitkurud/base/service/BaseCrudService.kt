@@ -9,7 +9,10 @@ import com.amitkurud.base.mappers.EntityMapper
 import com.amitkurud.base.transfer.BaseDTO
 import org.springframework.data.jpa.repository.JpaRepository
 
-abstract class BaseCrudService<D : BaseDTO, E : BaseEntity, R : JpaRepository<E, String>, M : EntityMapper<D, E>>(private val repository: R, private val mapper: M) {
+abstract class BaseCrudService<D : BaseDTO, E : BaseEntity, R : JpaRepository<E, String>, M : EntityMapper<D, E>>(
+    private val repository: R,
+    private val mapper: M
+) {
     fun create(dto: D): D {
         return mapper.toDto(repository.save(mapper.toEntity(dto)))
     }

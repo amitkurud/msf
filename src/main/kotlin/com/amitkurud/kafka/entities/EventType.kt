@@ -4,6 +4,4 @@
 
 package com.amitkurud.kafka.entities
 
-enum class EventType {
-
-}
+enum class EventType

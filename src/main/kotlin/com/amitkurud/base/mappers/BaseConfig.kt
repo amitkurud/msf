@@ -3,13 +3,13 @@
  */
 package com.amitkurud.base.mappers
 
-import com.amitkurud.base.domain.BaseEntity
-import com.amitkurud.base.transfer.BaseDTO
-import org.mapstruct.*
+import org.mapstruct.MapperConfig
+import org.mapstruct.MappingInheritanceStrategy
+import org.mapstruct.ReportingPolicy
 
 
-@MapperConfig(unmappedTargetPolicy = ReportingPolicy.ERROR,
-        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_FROM_CONFIG
+@MapperConfig(
+    unmappedTargetPolicy = ReportingPolicy.ERROR,
+    mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_FROM_CONFIG
 )
-interface BaseConfig {
-}
+interface BaseConfig

@@ -23,7 +23,8 @@ import springfox.documentation.spi.service.contexts.ParameterContext
 /**
  * The Springfox Plugin to resolve [org.springframework.data.domain.Pageable] parameter into plain fields.
  */
-class PageableParameterSwaggerPlugin(val nameExtractor: TypeNameExtractor, val resolver: TypeResolver) : OperationBuilderPlugin {
+class PageableParameterSwaggerPlugin(val nameExtractor: TypeNameExtractor, val resolver: TypeResolver) :
+    OperationBuilderPlugin {
     private val pageableType: ResolvedType = resolver.resolve(Pageable::class.java)
 
     /** {@inheritDoc}  */
@@ -37,11 +38,13 @@ class PageableParameterSwaggerPlugin(val nameExtractor: TypeNameExtractor, val r
         for (methodParameter in context.parameters) {
             val resolvedType = methodParameter.parameterType
             if (pageableType == resolvedType) {
-                val parameterContext = ParameterContext(methodParameter,
-                        ParameterBuilder(),
-                        context.documentationContext,
-                        context.genericsNamingStrategy,
-                        context)
+                val parameterContext = ParameterContext(
+                    methodParameter,
+                    ParameterBuilder(),
+                    context.documentationContext,
+                    context.genericsNamingStrategy,
+                    context
+                )
                 parameters.add(createPageParameter(parameterContext))
                 parameters.add(createSizeParameter(parameterContext))
                 parameters.add(createSortParameter(parameterContext))
@@ -53,43 +56,45 @@ class PageableParameterSwaggerPlugin(val nameExtractor: TypeNameExtractor, val r
     protected fun createPageParameter(context: ParameterContext): Parameter {
         val intModel = createModelRefFactory(context)?.apply(resolver.resolve(Integer.TYPE))
         return ParameterBuilder()
-                .name(pageName)
-                .parameterType(PAGE_TYPE)
-                .modelRef(intModel)
-                .description(PAGE_DESCRIPTION)
-                .build()
+            .name(pageName)
+            .parameterType(PAGE_TYPE)
+            .modelRef(intModel)
+            .description(PAGE_DESCRIPTION)
+            .build()
     }
 
 
     protected fun createSizeParameter(context: ParameterContext): Parameter {
         val intModel = createModelRefFactory(context)?.apply(resolver.resolve(Integer.TYPE))
         return ParameterBuilder()
-                .name(sizeName)
-                .parameterType(SIZE_TYPE)
-                .modelRef(intModel)
-                .description(SIZE_DESCRIPTION)
-                .build()
+            .name(sizeName)
+            .parameterType(SIZE_TYPE)
+            .modelRef(intModel)
+            .description(SIZE_DESCRIPTION)
+            .build()
     }
 
     protected fun createSortParameter(context: ParameterContext): Parameter {
-        val stringModel = createModelRefFactory(context)?.apply(resolver.resolve(MutableList::class.java, String::class.java))
+        val stringModel =
+            createModelRefFactory(context)?.apply(resolver.resolve(MutableList::class.java, String::class.java))
         return ParameterBuilder()
-                .name(sortName)
-                .parameterType(SORT_TYPE)
-                .modelRef(stringModel)
-                .allowMultiple(true)
-                .description(SORT_DESCRIPTION)
-                .build()
+            .name(sortName)
+            .parameterType(SORT_TYPE)
+            .modelRef(stringModel)
+            .allowMultiple(true)
+            .description(SORT_DESCRIPTION)
+            .build()
     }
 
     protected fun createModelRefFactory(context: ParameterContext): com.google.common.base.Function<ResolvedType, ModelReference>? {
         val modelContext = ModelContext.inputParam(
-                context.groupName,
-                context.resolvedMethodParameter().parameterType,
-                context.documentationType,
-                context.alternateTypeProvider,
-                context.genericNamingStrategy,
-                context.ignorableParameterTypes)
+            context.groupName,
+            context.resolvedMethodParameter().parameterType,
+            context.documentationType,
+            context.alternateTypeProvider,
+            context.genericNamingStrategy,
+            context.ignorableParameterTypes
+        )
         return ResolvedTypes.modelRefFactory(modelContext, nameExtractor)
     }
 

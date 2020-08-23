@@ -32,7 +32,13 @@ import javax.servlet.Servlet
 
 @Configuration
 @ConditionalOnWebApplication
-@ConditionalOnClass(ApiInfo::class, BeanValidatorPluginsConfiguration::class, Servlet::class, DispatcherServlet::class, Docket::class)
+@ConditionalOnClass(
+    ApiInfo::class,
+    BeanValidatorPluginsConfiguration::class,
+    Servlet::class,
+    DispatcherServlet::class,
+    Docket::class
+)
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration::class)
 class SwaggerAutoConfig {
@@ -43,16 +49,19 @@ class SwaggerAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean(name = ["swaggerSpringfoxManagementDocket"])
-    fun swaggerSpringfoxManagementDocket(@Value("\${spring.application.name:application}") appName: String?, swaggerCustomizers: List<SwaggerCustomizer?>?): Docket {
+    fun swaggerSpringfoxManagementDocket(
+        @Value("\${spring.application.name:application}") appName: String?,
+        swaggerCustomizers: List<SwaggerCustomizer?>?
+    ): Docket {
         val apiInfo = ApiInfo(
-                StringUtils.capitalize(appName) + " " + MANAGEMENT_TITLE_SUFFIX,
-                mavenBuildInfo,
-                "0.0.1-SNAPSHOT",
-                "",
-                ApiInfo.DEFAULT_CONTACT,
-                "",
-                "",
-                ArrayList()
+            StringUtils.capitalize(appName) + " " + MANAGEMENT_TITLE_SUFFIX,
+            mavenBuildInfo,
+            "0.0.1-SNAPSHOT",
+            "",
+            ApiInfo.DEFAULT_CONTACT,
+            "",
+            "",
+            ArrayList()
         )
         return createDocket().apiInfo(apiInfo)
     }
@@ -74,16 +83,16 @@ class SwaggerAutoConfig {
 
     protected fun createDocket(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
-                .useDefaultResponseMessages(true)
-                .forCodeGeneration(true)
-                .directModelSubstitute(ByteBuffer::class.java, String::class.java)
-                .genericModelSubstitutes(ResponseEntity::class.java)
-                .ignoredParameterTypes(Pageable::class.java)
-                .select()
-                .apis(RequestHandlerSelectors.withClassAnnotation(RestController::class.java))
-                .paths(PathSelectors.any())
-                .paths(Predicates.not(PathSelectors.regex("/error/*")))
-                .build()
+            .useDefaultResponseMessages(true)
+            .forCodeGeneration(true)
+            .directModelSubstitute(ByteBuffer::class.java, String::class.java)
+            .genericModelSubstitutes(ResponseEntity::class.java)
+            .ignoredParameterTypes(Pageable::class.java)
+            .select()
+            .apis(RequestHandlerSelectors.withClassAnnotation(RestController::class.java))
+            .paths(PathSelectors.any())
+            .paths(Predicates.not(PathSelectors.regex("/error/*")))
+            .build()
     }
 
     companion object {

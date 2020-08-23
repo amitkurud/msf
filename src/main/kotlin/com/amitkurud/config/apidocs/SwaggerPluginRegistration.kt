@@ -29,8 +29,10 @@ class SwaggerPluginRegistration {
     class SpringPagePluginConfiguration {
         @Bean
         @ConditionalOnMissingBean
-        fun pageableParameterBuilderPlugin(typeNameExtractor: TypeNameExtractor?,
-                                           typeResolver: TypeResolver?): PageableParameterSwaggerPlugin {
+        fun pageableParameterBuilderPlugin(
+            typeNameExtractor: TypeNameExtractor?,
+            typeResolver: TypeResolver?
+        ): PageableParameterSwaggerPlugin {
             return PageableParameterSwaggerPlugin(typeNameExtractor!!, typeResolver!!)
         }
     }

@@ -11,7 +11,7 @@ import javax.persistence.*
 @MappedSuperclass
 abstract class TranslatedEntity<T : TranslationEntity> : BaseEntity() {
 
-    @OneToMany(cascade = [CascadeType.ALL],orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "entity_id", referencedColumnName = "id")
     @Fetch(FetchMode.JOIN)
     var translations: MutableSet<T> = mutableSetOf()

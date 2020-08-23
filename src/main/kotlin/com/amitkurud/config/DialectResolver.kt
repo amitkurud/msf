@@ -6,7 +6,6 @@ package com.amitkurud.config
 import org.springframework.data.jdbc.repository.config.DialectResolver.JdbcDialectProvider
 import org.springframework.data.relational.core.dialect.Dialect
 import org.springframework.data.relational.core.dialect.MySqlDialect
-import org.springframework.jdbc.core.ConnectionCallback
 import org.springframework.jdbc.core.JdbcOperations
 import java.sql.Connection
 import java.sql.SQLException
@@ -15,7 +14,7 @@ import java.util.*
 class DialectResolver : JdbcDialectProvider {
     override fun getDialect(operations: JdbcOperations): Optional<Dialect> {
         return Optional.ofNullable(
-                operations.execute { connection: Connection -> getDialect(connection) })
+            operations.execute { connection: Connection -> getDialect(connection) })
     }
 
     companion object {

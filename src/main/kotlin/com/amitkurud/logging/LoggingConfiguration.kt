@@ -13,9 +13,10 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @RefreshScope
 class LoggingConfiguration(
-        @Value("\${spring.application.name}") appName: String,
-        @Value("\${server.port}") serverPort: String,
-        buildProperties: BuildProperties?) {
+    @Value("\${spring.application.name}") appName: String,
+    @Value("\${server.port}") serverPort: String,
+    buildProperties: BuildProperties?
+) {
     init {
         val context = LoggerFactory.getILoggerFactory() as LoggerContext
 

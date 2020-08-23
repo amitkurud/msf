@@ -22,7 +22,7 @@ import java.util.concurrent.Executors
 @RequestMapping("coreKafka")
 @Api
 class KafkaResource(
-        private val kafkaProperties: KafkaProperties
+    private val kafkaProperties: KafkaProperties
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -36,14 +36,26 @@ class KafkaResource(
 
     @PostMapping("/publish/{topic}")
     @Throws(*[ExecutionException::class, InterruptedException::class])
-    fun publish(@PathVariable topic: String, @RequestParam message: String, @RequestParam(required = false) key: String?): PublishResult {
+    fun publish(
+        @PathVariable topic: String,
+        @RequestParam message: String,
+        @RequestParam(required = false) key: String?
+    ): PublishResult {
         log.debug("REST request to send to Kafka topic $topic with key $key the message : $message")
         val metadata = producer.send(ProducerRecord(topic, key, message)).get()
-        return PublishResult(metadata.topic(), metadata.partition(), metadata.offset(), Instant.ofEpochMilli(metadata.timestamp()))
+        return PublishResult(
+            metadata.topic(),
+            metadata.partition(),
+            metadata.offset(),
+            Instant.ofEpochMilli(metadata.timestamp())
+        )
     }
 
     @GetMapping("/consume")
-    fun consume(@RequestParam("topic") topics: List<String>, @RequestParam consumerParams: Map<String, String>): SseEmitter {
+    fun consume(
+        @RequestParam("topic") topics: List<String>,
+        @RequestParam consumerParams: Map<String, String>
+    ): SseEmitter {
         log.debug("REST request to consume records from Kafka topics $topics")
         val consumerProps = kafkaProperties.getConsumerProps()
         consumerProps.putAll(consumerParams)
@@ -74,9 +86,9 @@ class KafkaResource(
     }
 
     class PublishResult(
-            val topic: String,
-            val partition: Int,
-            val offset: Long,
-            val timestamp: Instant
+        val topic: String,
+        val partition: Int,
+        val offset: Long,
+        val timestamp: Instant
     )
 }
